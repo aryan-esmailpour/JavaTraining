@@ -4,9 +4,7 @@ import com.example.bootjpa.model.Alien;
 import com.example.bootjpa.repos.AlienRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -21,16 +19,22 @@ public class AlienController {
         return "home.html";
     }
 
-    @RequestMapping("/addAlien")
-    public ModelAndView addAlien(Alien alien)
+    @PostMapping("/alien")
+    public Alien addAlien(Alien alien)
     {
         repo.save(alien);
-        ModelAndView mv = new ModelAndView("home.html");
-        return mv;
+        return alien;
         //return "home.html";
     }
 
-    @RequestMapping("/getAlien")
+    @DeleteMapping("/alien")
+    public String deleteAlien(@RequestParam int aid)
+    {
+        Alien alien = repo.findById(aid).orElse(new Alien());
+        repo.delete(alien);
+        return "deleted";
+    }
+    @GetMapping("/alien")
     public Alien getAlien(@RequestParam int aid)
     {
         //ModelAndView mv = new ModelAndView("show.html");

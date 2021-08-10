@@ -1,11 +1,13 @@
 package com.example.bootjpa.controller;
 
 import com.example.bootjpa.model.Alien;
+import com.example.bootjpa.model.School;
 import com.example.bootjpa.repos.AlienRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @RestController
 public class AlienController {
@@ -14,27 +16,31 @@ public class AlienController {
     AlienRepo repo;
 
     @RequestMapping("/home")
-    public String home()
+    public ModelAndView home()
     {
-        return "home.html";
+        ModelAndView mv = new ModelAndView("home.html");
+        return mv;
     }
 
-    @PostMapping("/alien")
+    @RequestMapping("/addStudent")
     public Alien addAlien(Alien alien)
     {
+        School school = alien.getSchool();
+        school.addToStudents(alien);
         repo.save(alien);
         return alien;
         //return "home.html";
     }
 
-    @DeleteMapping("/alien")
+    @RequestMapping("/deleteStudent")
     public String deleteAlien(@RequestParam int aid)
     {
-        Alien alien = repo.findById(aid).orElse(new Alien());
+        Alien alien = repo.findById(aid).orElse(null);
         repo.delete(alien);
         return "deleted";
     }
-    @GetMapping("/alien")
+
+    @RequestMapping("/getStudent")
     public Alien getAlien(@RequestParam int aid)
     {
         //ModelAndView mv = new ModelAndView("show.html");
@@ -43,6 +49,14 @@ public class AlienController {
         //return mv;
         return alien;
     }
+
+    @RequestMapping("/students")
+    public List<Alien> allAliens()
+    {
+        return repo.findAll();
+    }
+
+
 
 
 }

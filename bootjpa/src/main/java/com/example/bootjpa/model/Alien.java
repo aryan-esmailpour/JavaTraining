@@ -1,14 +1,40 @@
 package com.example.bootjpa.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.*;
+
+
+
+
+//@Table(name = "studenttable")
 @Entity
 public class Alien {
     @Id
     private int aid;
     private String aname;
     private String course;
+    private int agrade;
+
+    @ManyToOne
+    private School school;
+
+    @JsonBackReference
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public int getAgrade() {
+        return agrade;
+    }
+
+    public void setAgrade(int agrade) {
+        this.agrade = agrade;
+    }
 
     public String getCourse() {
         return course;
